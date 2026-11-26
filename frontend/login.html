@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center p-4">
+<form id="loginForm" class="bg-white rounded-lg p-6 w-full max-w-sm space-y-3">
+  <h1 class="text-xl font-bold text-blue-700">Clean House Login</h1>
+  <input id="user" placeholder="Username" class="w-full border rounded p-2">
+  <input id="pass" type="password" placeholder="Password" class="w-full border rounded p-2">
+  <p id="msg" class="text-red-600 text-sm"></p>
+  <button class="w-full bg-blue-600 text-white rounded p-2">Login</button>
+</form>
+<script src="js/api.js"></script>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const r = await api('/auth/login', { method: 'POST', body: { username: user.value, password: pass.value } });
+    localStorage.setItem('token', r.token); localStorage.setItem('role', r.role);
+    location.href = 'index.html';
+  } catch (err) { msg.textContent = err.message; }
+});
+</script></body></html>

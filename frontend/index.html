@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student House Cleaning System</title>
+<!-- Tailwind CSS from CDN: no install needed for beginners -->
+<script src="https://cdn.tailwindcss.com"></script>
+<style>.page{display:none}.page.active{display:block}.nav-btn.active{background:#fff;color:#1d4ed8}</style>
+</head>
+<body class="bg-blue-50 text-slate-800 md:flex min-h-screen">
+
+<!-- SIDEBAR -->
+<aside class="bg-blue-700 text-blue-100 md:w-60 md:min-h-screen p-4 shrink-0">
+  <h1 class="text-white font-bold text-lg mb-4">Clean House</h1>
+  <nav id="nav" class="flex md:flex-col gap-1 overflow-x-auto">
+    <button class="nav-btn active text-left px-3 py-2 rounded whitespace-nowrap" data-page="dashboard">Dashboard</button>
+    <button class="nav-btn text-left px-3 py-2 rounded whitespace-nowrap" data-page="register">Register Student</button>
+    <button class="nav-btn text-left px-3 py-2 rounded whitespace-nowrap" data-page="students">Student List</button>
+    <button class="nav-btn text-left px-3 py-2 rounded whitespace-nowrap" data-page="schedule">Schedule</button>
+    <button class="nav-btn text-left px-3 py-2 rounded whitespace-nowrap" data-page="photo">Upload Photo</button>
+    <button class="nav-btn text-left px-3 py-2 rounded whitespace-nowrap" data-page="reports">Monthly Report</button>
+  </nav>
+</aside>
+
+<main class="flex-1 p-4 md:p-8">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+  <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
+  <div id="stats" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+</section>
+
+<!-- REGISTER STUDENT -->
+<section id="register" class="page">
+  <h2 class="text-2xl font-bold mb-4">Register Student</h2>
+  <form id="studentForm" class="bg-white rounded-lg p-5 grid md:grid-cols-2 gap-4 max-w-3xl" novalidate>
+    <label>Full name<input id="sName" class="w-full border rounded p-2 mt-1"><small class="err text-red-600"></small></label>
+    <label>Gender<select id="sGender" class="w-full border rounded p-2 mt-1"><option>Female</option><option>Male</option></select></label>
+    <label>Age<input id="sAge" type="number" class="w-full border rounded p-2 mt-1"><small class="err text-red-600"></small></label>
+    <label>Major<input id="sMajor" class="w-full border rounded p-2 mt-1"><small class="err text-red-600"></small></label>
+    <label>Phone<input id="sPhone" class="w-full border rounded p-2 mt-1"><small class="err text-red-600"></small></label>
+    <label>Email<input id="sEmail" type="email" class="w-full border rounded p-2 mt-1"><small class="err text-red-600"></small></label>
+    <label class="md:col-span-2">Profile picture
+      <input id="sPic" type="file" accept="image/*" class="w-full mt-1">
+      <img id="sPicPreview" class="hidden w-24 h-24 rounded-full object-cover mt-2" alt="Preview">
+    </label>
+    <button class="bg-blue-600 hover:bg-blue-700 text-white rounded p-2 md:col-span-2">Save student</button>
+  </form>
+</section>
+
+<!-- STUDENT LIST -->
+<section id="students" class="page">
+  <h2 class="text-2xl font-bold mb-4">Student List</h2>
+  <input id="search" placeholder="Search by name or major..." class="border rounded p-2 w-full max-w-md mb-4">
+  <div id="studentCards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule" class="page">
+  <h2 class="text-2xl font-bold mb-4">Cleaning Schedule</h2>
+  <form id="taskForm" class="bg-white rounded-lg p-5 grid md:grid-cols-3 gap-4 mb-6" novalidate>
+    <label>Activity
+      <select id="tName" class="w-full border rounded p-2 mt-1">
+        <option>Clean Bedroom first floor</option><option>Clean Kitchen</option>
+        <option>Clean Bathroom second floor</option><option>Sweep the first Floor</option>
+        <option>Sweep the second Floor</option><option>Mop the first Floor</option>
+        <option>Mop the second Floor</option><option>Clean Living Room</option><option>Take Out Trash</option>
+      </select></label>
+    <label>Student<select id="tStudent" class="w-full border rounded p-2 mt-1"></select></label>
+    <label>Due date<input id="tDate" type="date" class="w-full border rounded p-2 mt-1"><small class="err text-red-600"></small></label>
+    <button class="bg-blue-600 hover:bg-blue-700 text-white rounded p-2 md:col-span-3">Assign activity</button>
+  </form>
+  <div class="bg-white rounded-lg overflow-x-auto">
+    <table class="w-full text-left"><thead class="bg-blue-100"><tr>
+      <th class="p-3">Activity</th><th class="p-3">Student</th><th class="p-3">Due</th><th class="p-3">Status</th><th class="p-3"></th>
+    </tr></thead><tbody id="taskRows"></tbody></table>
+  </div>
+</section>
+
+<!-- UPLOAD PHOTO -->
+<section id="photo" class="page">
+  <h2 class="text-2xl font-bold mb-4">Upload Cleaning Photo</h2>
+  <div class="bg-white rounded-lg p-5 max-w-xl">
+    <label>Choose your task<select id="pTask" class="w-full border rounded p-2 mt-1 mb-3"></select></label>
+    <input id="pFile" type="file" accept="image/*" capture="environment" class="w-full">
+    <img id="pPreview" class="hidden w-full rounded mt-3" alt="Photo preview">
+    <p id="pMsg" class="mt-3 font-medium"></p>
+    <button id="pSubmit" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white rounded p-2 w-full">Submit photo</button>
+  </div>
+  <h3 class="text-xl font-bold mt-6 mb-2">Photo gallery</h3>
+  <div id="gallery" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+</section>
+
+<!-- MONTHLY REPORT -->
+<section id="reports" class="page">
+  <h2 class="text-2xl font-bold mb-4">Monthly Report</h2>
+  <input id="month" type="month" class="border rounded p-2 mb-4">
+  <div class="bg-white rounded-lg overflow-x-auto">
+    <table class="w-full text-left"><thead class="bg-blue-100"><tr>
+      <th class="p-3">Student</th><th class="p-3">Completed</th><th class="p-3">Pending</th><th class="p-3">Overdue</th>
+    </tr></thead><tbody id="reportRows"></tbody></table>
+  </div>
+</section>
+
+</main>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
